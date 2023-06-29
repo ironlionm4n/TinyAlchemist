@@ -11,6 +11,7 @@ namespace DefaultNamespace
         [SerializeField] private float groundedRaycastDistance = 0.2f;
         [SerializeField] private LayerMask whatIsGround;
         [SerializeField] private float jumpCooldown = 0.2f;
+        [SerializeField] private float groundRayModifier;
         
         private Rigidbody2D _rigidbody2D;
         private float _jumpTime;
@@ -20,6 +21,7 @@ namespace DefaultNamespace
         private static readonly int Jump = Animator.StringToHash("Jump");
         private static readonly int FallY = Animator.StringToHash("fallY");
         private static readonly int Land = Animator.StringToHash("Land");
+        private static readonly int IsJumping = Animator.StringToHash("IsJumping");
 
         private void Start()
         {
@@ -29,25 +31,34 @@ namespace DefaultNamespace
 
         private void Update()
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, groundedRaycastDistance, whatIsGround);
+            // Two raycasts from the left and right sides of the player
+            RaycastHit2D hitLeft = Physics2D.Raycast((transform.position + (Vector3.left * groundRayModifier)), Vector2.down, groundedRaycastDistance, whatIsGround);
+            RaycastHit2D hitRight = Physics2D.Raycast((transform.position + (Vector3.right * groundRayModifier)), Vector2.down, groundedRaycastDistance, whatIsGround);
 
-            // Draw the raycast for debugging
-            Debug.DrawRay(transform.position, Vector2.down * groundedRaycastDistance, Color.green);
+            // Draw the raycasts for debugging
+            Debug.DrawRay((transform.position + (Vector3.left * groundRayModifier)), Vector2.down * groundedRaycastDistance, Color.green);
+            Debug.DrawRay((transform.position + (Vector3.right * groundRayModifier)), Vector2.down * groundedRaycastDistance, Color.blue);
 
-            if (hit.collider != null)
+            bool isGrounded = hitLeft.collider != null || hitRight.collider != null;
+
+            if (isGrounded)
             {
+                _rigidbody2D.gravityScale = 2f;
                 // Reset Y velocity on landing
-                if(_rigidbody2D.velocity.y < 0)
+                if(_rigidbody2D.velocity.y <= 0)
                 {
                     _animator.SetTrigger(Land);
+                    _animator.ResetTrigger(Jump);
                     _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, 0);
                     _animator.SetFloat(FallY, 0);
                 }
+                
                 if (Input.GetAxisRaw("Vertical") > 0 && Time.time - _lastJumpTime >= jumpCooldown)
                 {
                     _isJumping = true;
                     _animator.ResetTrigger(Land);
                     _animator.SetTrigger(Jump);
+                    _animator.SetBool(IsJumping, true);
                     _jumpTime = 0;
                     _rigidbody2D.AddForce(Vector2.up * initialJumpForce, ForceMode2D.Impulse);
                     _lastJumpTime = Time.time;
@@ -62,10 +73,12 @@ namespace DefaultNamespace
             else if (_isJumping)
             {
                 // The player is no longer jumping when they let go of the button
+                _rigidbody2D.gravityScale = 5f;
                 _isJumping = false;
+                _animator.SetBool(IsJumping, false);
             }
 
-            if (hit.collider == null && _rigidbody2D.velocity.y < 0)
+            if (!isGrounded && _rigidbody2D.velocity.y < 0)
             {
                 _animator.ResetTrigger(Jump);
                 _animator.SetFloat(FallY, _rigidbody2D.velocity.y);
