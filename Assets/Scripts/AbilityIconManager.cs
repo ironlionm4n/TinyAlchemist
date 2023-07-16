@@ -17,6 +17,7 @@ namespace DefaultNamespace
 
         private void OnDisable()
         {
+            // prevent memory leak
             PlayerPowers.IgniteUsed -= OnIgniteUsed;
         }
 
