@@ -289,7 +289,7 @@ MonoBehaviour:
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 1
-  m_VolumeTrigger: {fileID: 0}
+  m_VolumeTrigger: {fileID: 414530677}
   m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 1
   m_Antialiasing: 0
@@ -504,6 +504,7 @@ GameObject:
   m_Component:
   - component: {fileID: 631152029}
   - component: {fileID: 631152030}
+  - component: {fileID: 631152031}
   m_Layer: 0
   m_Name: IgniteCollider
   m_TagString: Untagged
@@ -533,7 +534,7 @@ PolygonCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 631152028}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -577,6 +578,19 @@ PolygonCollider2D:
       - {x: 1.0620476, y: -0.31401795}
       - {x: 0.46503627, y: 0.44156805}
   m_UseDelaunayMesh: 0
+--- !u!114 &631152031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631152028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60350e895fa86114f8760e12ec94d334, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  powers: {fileID: 846844886}
 --- !u!1 &736200348
 GameObject:
   m_ObjectHideFlags: 0
@@ -677,6 +691,7 @@ GameObject:
   - component: {fileID: 846844882}
   - component: {fileID: 846844884}
   - component: {fileID: 846844886}
+  - component: {fileID: 846844887}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -893,7 +908,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a44385630d1d4dbc80ee86162814babf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  igniteCooldownTime: 3
+  playerPowers:
+  - {fileID: 11400000, guid: ae1ca66b0fc60da46ab690a5c4a69ce2, type: 2}
+--- !u!114 &846844887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 846844878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 612920732cf8499db7be3a0e8ac3adf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerHealth: 1
 --- !u!1 &931733759
 GameObject:
   m_ObjectHideFlags: 0
@@ -3378,6 +3407,9 @@ GameObject:
   - component: {fileID: 1603487364}
   - component: {fileID: 1603487363}
   - component: {fileID: 1603487365}
+  - component: {fileID: 1603487366}
+  - component: {fileID: 1603487367}
+  - component: {fileID: 1603487368}
   m_Layer: 0
   m_Name: Slime
   m_TagString: Untagged
@@ -3477,6 +3509,77 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 50
   moveTime: 3
+--- !u!114 &1603487366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1603487361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe47048d0fa0a2a4fad71cea5d47cf00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 1
+--- !u!114 &1603487367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1603487361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4c19ab81e1ffcf4bb8c4bdb5ce3a11f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
+--- !u!61 &1603487368
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1603487361}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.0016121864, y: -0.24180907}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.5905371, y: 0.51638186}
+  m_EdgeRadius: 0
 --- !u!1 &1835540876
 GameObject:
   m_ObjectHideFlags: 0

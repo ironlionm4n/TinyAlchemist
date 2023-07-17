@@ -29,8 +29,7 @@ namespace DefaultNamespace
 
         private IEnumerator IgniteCooldown(PlayerPowers playerPowers)
         {
-            Debug.Log(playerPowers.IgniteCooldownTime);
-            yield return new WaitForSeconds(playerPowers.IgniteCooldownTime);
+            yield return new WaitForSeconds(playerPowers.GetPlayerPowers[0].PowerCooldown);
             igniteImage.color = new Color(1f, 1f, 1f, 1f);
             playerPowers.IgniteRefreshed();
         }

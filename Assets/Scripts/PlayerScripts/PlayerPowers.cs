@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using ScriptableObjects;
 using UnityEngine;
 
 namespace DefaultNamespace
 {
     public class PlayerPowers : MonoBehaviour
     {
-        [SerializeField] private float igniteCooldownTime;
-        public float IgniteCooldownTime => igniteCooldownTime;
+        [SerializeField] private List<PlayerPowerScriptableObjects> playerPowers;
+        public List<PlayerPowerScriptableObjects> GetPlayerPowers => playerPowers;
         private Animator _playerAnimator;
         private static readonly int Ignite = Animator.StringToHash("Ignite");
         private bool _canIgnite = true;
