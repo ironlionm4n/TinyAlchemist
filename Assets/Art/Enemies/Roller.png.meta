@@ -618,6 +618,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Roller_23
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ddc490703f9fcb41879473742fb6f19
+      internalID: -172631924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -645,6 +666,7 @@ TextureImporter:
       Roller_20: -785346675
       Roller_21: 1226470460
       Roller_22: -910596073
+      Roller_23: -172631924
       Roller_3: 1708046404
       Roller_4: 2143832133
       Roller_5: -1824733684
