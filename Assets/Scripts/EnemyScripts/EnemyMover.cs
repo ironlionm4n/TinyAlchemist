@@ -23,11 +23,11 @@ public class EnemyMover : MonoBehaviour
         _currentMoveTime -= Time.deltaTime;
         if(_currentMoveTime <= 0)
         {
-            _rigidbody2D.velocity = ChooseDirection() * (moveSpeed * Time.deltaTime);
+            _rigidbody2D.velocity = ChooseLeftOrRight() * (moveSpeed * Time.deltaTime);
         }
     }
 
-    private Vector2 ChooseDirection()
+    private Vector2 ChooseLeftOrRight()
     {
         var flip = Random.Range(0, 2);
         _currentMoveTime = moveTime;
