@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using PlayerScripts;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -9,6 +8,8 @@ namespace PlayerScripts
     public class PlayerPowers : MonoBehaviour
     {
         [SerializeField] private List<PlayerPowerScriptableObjects> playerPowers;
+        [SerializeField] private AudioSource igniteAudioSource;
+        [SerializeField] private PlayerMovement playerMovement;
         public List<PlayerPowerScriptableObjects> GetPlayerPowers => playerPowers;
         private Animator _playerAnimator;
         private static readonly int Ignite = Animator.StringToHash("Ignite");
@@ -36,10 +37,11 @@ namespace PlayerScripts
         {
             if (_isDead) return;
             
-            if (Input.GetKeyDown(KeyCode.Alpha1) && _canIgnite)
+            if (!playerMovement.IsDashing && Input.GetKeyDown(KeyCode.Alpha1) && _canIgnite)
             {
                 _canIgnite = false;
                 _playerAnimator.SetTrigger(Ignite);
+                igniteAudioSource.PlayOneShot(igniteAudioSource.clip);
                 _playerAnimator.SetBool(IsInPower, true);
                 IgniteUsed?.Invoke(this);
             }

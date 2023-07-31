@@ -1,7 +1,5 @@
-﻿using System;
-using Scripts.Interfaces;
+﻿using Scripts.Interfaces;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace PlayerScripts
 {

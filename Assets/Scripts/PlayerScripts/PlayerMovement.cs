@@ -11,6 +11,7 @@ namespace PlayerScripts
         [SerializeField] private float knockBackDelay = 1f;
         [SerializeField] private LayerMask invulnerableLayerMask;
         [SerializeField] private LayerMask normalLayerMask;
+        [SerializeField] private AudioSource dashAudioSource;
 
         private Rigidbody2D _rigidbody2D;
         private Animator _animator;
@@ -21,6 +22,8 @@ namespace PlayerScripts
         private static readonly int Dash = Animator.StringToHash("Dash");
         private bool _isGettingKnockBacked;
         private bool _isDead;
+        private bool _isDashing;
+        public bool IsDashing => _isDashing;
 
         private void OnEnable()
         {
@@ -69,6 +72,8 @@ namespace PlayerScripts
 
         private void HandleDash(float targetVelocity)
         {
+            _isDashing = true;
+            dashAudioSource.PlayOneShot(dashAudioSource.clip);
             var dashDirection = targetVelocity < 0 ? Vector2.left : Vector2.right;
             _rigidbody2D.AddForce(dashDirection * dashForce, ForceMode2D.Impulse);
             _animator.SetTrigger(Dash);
@@ -118,6 +123,7 @@ namespace PlayerScripts
     
         public void EndDashInvulnerabilityAnimationEvent()
         {
+            _isDashing = false;
             _rigidbody2D.excludeLayers = normalLayerMask;
         }
     }
