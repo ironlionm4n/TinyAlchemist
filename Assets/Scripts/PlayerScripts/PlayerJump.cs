@@ -1,6 +1,4 @@
-﻿using System;
-using PlayerScripts;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace PlayerScripts
 {
@@ -13,6 +11,7 @@ namespace PlayerScripts
         [SerializeField] private LayerMask whatIsGround;
         [SerializeField] private float jumpCooldown = 0.2f;
         [SerializeField] private float groundRayModifier;
+        [SerializeField] private AudioSource jumpAudioSource;
         
         private Rigidbody2D _rigidbody2D;
         private float _jumpTime;
@@ -67,6 +66,7 @@ namespace PlayerScripts
                     _isJumping = true;
                     _animator.ResetTrigger(Land);
                     _animator.SetTrigger(Jump);
+                    jumpAudioSource.PlayOneShot(jumpAudioSource.clip);
                     _animator.SetBool(IsJumping, true);
                     _jumpTime = 0;
                     _rigidbody2D.AddForce(Vector2.up * initialJumpForce, ForceMode2D.Impulse);

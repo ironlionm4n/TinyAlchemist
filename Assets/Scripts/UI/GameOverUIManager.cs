@@ -1,8 +1,5 @@
-﻿using System;
-using PlayerScripts;
+﻿using PlayerScripts;
 using UnityEngine;
-using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace UI
 {
