@@ -1,7 +1,8 @@
 ﻿using System;
+using PlayerScripts;
 using UnityEngine;
 
-namespace DefaultNamespace
+namespace PlayerScripts
 {
     public class PlayerJump : MonoBehaviour
     {
@@ -22,6 +23,12 @@ namespace DefaultNamespace
         private static readonly int FallY = Animator.StringToHash("fallY");
         private static readonly int Land = Animator.StringToHash("Land");
         private static readonly int IsJumping = Animator.StringToHash("IsJumping");
+        private bool _isDead;
+
+        private void OnEnable()
+        {
+            PlayerHealth.PlayerDied += OnPlayerDied;
+        }
 
         private void Start()
         {
@@ -31,6 +38,8 @@ namespace DefaultNamespace
 
         private void Update()
         {
+            if (_isDead) return;
+            
             // Two raycasts from the left and right sides of the player
             RaycastHit2D hitLeft = Physics2D.Raycast((transform.position + (Vector3.left * groundRayModifier)), Vector2.down, groundedRaycastDistance, whatIsGround);
             RaycastHit2D hitRight = Physics2D.Raycast((transform.position + (Vector3.right * groundRayModifier)), Vector2.down, groundedRaycastDistance, whatIsGround);
@@ -83,6 +92,16 @@ namespace DefaultNamespace
                 _animator.ResetTrigger(Jump);
                 _animator.SetFloat(FallY, _rigidbody2D.velocity.y);
             }
+        }
+        
+        private void OnDisable()
+        {
+            PlayerHealth.PlayerDied -= OnPlayerDied;
+        }
+
+        private void OnPlayerDied()
+        {
+            _isDead = true;
         }
     }
 }

@@ -6,6 +6,7 @@ public class EnemyHealth : MonoBehaviour, ITakeDamage
 {
     [SerializeField] private int health;
     [SerializeField] private Animator animator;
+    [SerializeField] private BoxCollider2D damageCollider;
     
     public static event Action EnemyHit;
     
@@ -24,6 +25,7 @@ public class EnemyHealth : MonoBehaviour, ITakeDamage
     {
         if (health <= 0)
         {
+            damageCollider.enabled = false;
             animator.SetTrigger(Dead);
         }
     }
