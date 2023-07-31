@@ -1,19 +1,18 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using DefaultNamespace;
 using UnityEngine;
 
-public class IgniteDamage : MonoBehaviour
+namespace PlayerScripts
 {
-    [SerializeField] private PlayerPowers powers;
-
-    private void OnTriggerEnter2D(Collider2D other)
+    public class IgniteDamage : MonoBehaviour
     {
-        var otherHealth = other.GetComponent<EnemyHealth>();
-        if (otherHealth)
+        [SerializeField] private PlayerPowers powers;
+
+        private void OnTriggerEnter2D(Collider2D other)
         {
-            otherHealth.TakeDamage(powers.GetPlayerPowers[0].Damage);
+            var otherHealth = other.GetComponent<EnemyHealth>();
+            if (otherHealth)
+            {
+                otherHealth.TakeDamage(powers.GetPlayerPowers[0].Damage);
+            }
         }
     }
 }
