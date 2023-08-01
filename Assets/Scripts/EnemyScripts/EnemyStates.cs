@@ -6,6 +6,7 @@
         Moving,
         Attacking,
         Hit,
+        KnockBack,
         Death
     }
 }

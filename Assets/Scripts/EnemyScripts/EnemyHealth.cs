@@ -7,6 +7,7 @@ public class EnemyHealth : MonoBehaviour, ITakeDamage
     [SerializeField] private int health;
     [SerializeField] private Animator animator;
     [SerializeField] private BoxCollider2D damageCollider;
+    [SerializeField] private AudioSource audioSource;
     
     public static event Action EnemyHit;
     
@@ -27,6 +28,7 @@ public class EnemyHealth : MonoBehaviour, ITakeDamage
         {
             damageCollider.enabled = false;
             animator.SetTrigger(Dead);
+            audioSource.PlayOneShot(audioSource.clip);
         }
     }
 }
