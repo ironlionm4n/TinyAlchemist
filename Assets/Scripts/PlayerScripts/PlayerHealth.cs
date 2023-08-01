@@ -2,6 +2,7 @@
 using System.Collections;
 using Scripts.Interfaces;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace PlayerScripts
 {
@@ -14,7 +15,7 @@ namespace PlayerScripts
         [SerializeField] private Color damageFlashColor;
         [SerializeField] private Color normalColor;
         [SerializeField] private SpriteRenderer spriteRenderer;
-        [SerializeField] private Animator _animator;
+        [SerializeField] private Animator animator;
 
         private int _currentHealth;
         public int CurrentHealth => _currentHealth;
@@ -22,6 +23,25 @@ namespace PlayerScripts
         private PlayerDamageFlash _playerDamageFlash;
         private bool _isDead;
         private static readonly int IsDead = Animator.StringToHash("IsDead");
+
+        private void OnEnable()
+        {
+            HealthPickup.HealthPickedUp += OnHealthPickedUp;
+        }
+        
+        private void OnDisable()
+        {
+            HealthPickup.HealthPickedUp -= OnHealthPickedUp;
+        }
+
+        private void OnHealthPickedUp(int healAmount)
+        {
+            _currentHealth += healAmount;
+            if (_currentHealth > playerHealth)
+            {
+                _currentHealth = playerHealth;
+            }
+        }
 
         private void Start()
         {
@@ -58,7 +78,7 @@ namespace PlayerScripts
 
         private void HandlePlayerDeath()
         {
-            _animator.SetBool(IsDead, true);
+            animator.SetBool(IsDead, true);
             PlayerDied?.Invoke();
         }
     }

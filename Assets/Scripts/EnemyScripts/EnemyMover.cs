@@ -8,12 +8,15 @@ public class EnemyMover : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private float idleTime = 3f;
     [SerializeField] private Animator animator;
+    [SerializeField] private float rayDistance;
+    [SerializeField] private LayerMask groundLayer;
 
     private EnemyStates _currentState;
     private Rigidbody2D _rigidbody2D;
     private bool _isMoving;
     private float _currentIdleTime;
     private static readonly int IsMoving = Animator.StringToHash("IsMoving");
+    private bool _isGettingKnockedBack;
 
     #region UnityFunctions
 
@@ -33,6 +36,7 @@ public class EnemyMover : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+
         switch (_currentState)
         {
             case EnemyStates.Idle:
@@ -43,6 +47,9 @@ public class EnemyMover : MonoBehaviour
                 break;
             case EnemyStates.Hit:
                 HandleHit();
+                break;
+            case EnemyStates.KnockBack:
+                if (!_isGettingKnockedBack) StartCoroutine(KnockBackRoutine());
                 break;
         }
     }
@@ -60,14 +67,24 @@ public class EnemyMover : MonoBehaviour
     {
         StopCoroutine(Moving());
         animator.SetBool(IsMoving, false);
-        UpdateCurrentState(EnemyStates.Idle);
+        UpdateCurrentState(EnemyStates.KnockBack);
     }
 
     private IEnumerator Moving()
     {
+        var forwardHitCheck = Physics2D.Raycast(transform.position, Vector2.right, rayDistance, groundLayer);
+        var backwardsHitCheck = Physics2D.Raycast(transform.position, Vector2.left, rayDistance, groundLayer);
+
+        Vector2 desiredDirection;
+
+        if (forwardHitCheck.collider != null)
+            desiredDirection = Vector2.left;
+        else if (backwardsHitCheck.collider != null)
+            desiredDirection = Vector2.right;
+        else
+            desiredDirection = ChooseLeftOrRight();
         _isMoving = true;
         animator.SetBool(IsMoving, true);
-        var desiredDirection = ChooseLeftOrRight();
         _rigidbody2D.velocity = desiredDirection * (moveSpeed * Time.deltaTime);
         var timeToMove = Random.Range(2.5f, 4f);
         yield return new WaitForSeconds(timeToMove);
@@ -102,6 +119,14 @@ public class EnemyMover : MonoBehaviour
     {
         var flip = Random.Range(0, 2);
         return flip == 0 ? Vector2.left : Vector2.right;
+    }
+
+    private IEnumerator KnockBackRoutine()
+    {
+        _isGettingKnockedBack = true;
+        yield return new WaitForSeconds(1f);
+        _isGettingKnockedBack = false;
+        UpdateCurrentState(EnemyStates.Idle);
     }
 
     #endregion

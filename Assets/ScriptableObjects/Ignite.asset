@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b83e51220b60e124abbfe4e300c9b4f4, type: 3}
   m_Name: Ignite
   m_EditorClassIdentifier: 
-  damage: 10
+  damage: 20
   powerCooldown: 3

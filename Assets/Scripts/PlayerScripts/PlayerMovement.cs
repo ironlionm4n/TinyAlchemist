@@ -49,11 +49,13 @@ namespace PlayerScripts
 
             if (!_isGettingKnockBacked)
             {
-                _targetVelocity = Input.GetAxis("Horizontal") * maxMoveSpeedScaler;
+                var inputX = Input.GetAxisRaw("Horizontal");
+
+                _targetVelocity = inputX * maxMoveSpeedScaler;
                 _rigidbody2D.velocity = LerpedVelocity();
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    HandleDash(_targetVelocity);
+                    HandleDash();
                 }
 
                 HandleAnimator();
@@ -70,11 +72,11 @@ namespace PlayerScripts
             _isDead = true;
         }
 
-        private void HandleDash(float targetVelocity)
+        private void HandleDash()
         {
             _isDashing = true;
             dashAudioSource.PlayOneShot(dashAudioSource.clip);
-            var dashDirection = targetVelocity < 0 ? Vector2.left : Vector2.right;
+            var dashDirection = _targetVelocity < 0 ? Vector2.left : Vector2.right;
             _rigidbody2D.AddForce(dashDirection * dashForce, ForceMode2D.Impulse);
             _animator.SetTrigger(Dash);
         }
