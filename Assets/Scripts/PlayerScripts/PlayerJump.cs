@@ -16,6 +16,8 @@ namespace PlayerScripts
         private Rigidbody2D _rigidbody2D;
         private float _jumpTime;
         private bool _isJumping;
+        private bool _isGrounded;
+        public bool IsGrounded => _isGrounded;
         private float _lastJumpTime;
         private Animator _animator;
         private static readonly int Jump = Animator.StringToHash("Jump");
@@ -47,9 +49,9 @@ namespace PlayerScripts
             Debug.DrawRay((transform.position + (Vector3.left * groundRayModifier)), Vector2.down * groundedRaycastDistance, Color.green);
             Debug.DrawRay((transform.position + (Vector3.right * groundRayModifier)), Vector2.down * groundedRaycastDistance, Color.blue);
 
-            bool isGrounded = hitLeft.collider != null || hitRight.collider != null;
+            _isGrounded = hitLeft.collider != null || hitRight.collider != null;
 
-            if (isGrounded)
+            if (_isGrounded)
             {
                 _rigidbody2D.gravityScale = 2f;
                 // Reset Y velocity on landing
@@ -87,7 +89,7 @@ namespace PlayerScripts
                 _animator.SetBool(IsJumping, false);
             }
 
-            if (!isGrounded && _rigidbody2D.velocity.y < 0)
+            if (!_isGrounded && _rigidbody2D.velocity.y < 0)
             {
                 _animator.ResetTrigger(Jump);
                 _animator.SetFloat(FallY, _rigidbody2D.velocity.y);

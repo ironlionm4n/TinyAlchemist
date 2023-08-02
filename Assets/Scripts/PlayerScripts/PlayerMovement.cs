@@ -12,6 +12,8 @@ namespace PlayerScripts
         [SerializeField] private LayerMask invulnerableLayerMask;
         [SerializeField] private LayerMask normalLayerMask;
         [SerializeField] private AudioSource dashAudioSource;
+        [SerializeField] private AudioSource walkAudioSource;
+        [SerializeField] private PlayerJump playerJump;
 
         private Rigidbody2D _rigidbody2D;
         private Animator _animator;
@@ -23,7 +25,9 @@ namespace PlayerScripts
         private bool _isGettingKnockBacked;
         private bool _isDead;
         private bool _isDashing;
+        private bool _isWalkingAudioPlaying;
         public bool IsDashing => _isDashing;
+        private float _walkClipLength;
 
         private void OnEnable()
         {
@@ -33,6 +37,7 @@ namespace PlayerScripts
         // Start is called before the first frame update
         private void Start()
         {
+            _walkClipLength = walkAudioSource.clip.length * 2.5f;
             _rigidbody2D = GetComponent<Rigidbody2D>();
             _animator = GetComponent<Animator>();
             _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -41,6 +46,7 @@ namespace PlayerScripts
         // Update is called once per frame
         private void Update()
         {
+            Debug.Log(walkAudioSource.isPlaying);
             if (_isDead)
             {
                 _rigidbody2D.velocity = Vector2.zero;
@@ -51,6 +57,13 @@ namespace PlayerScripts
             {
                 var inputX = Input.GetAxisRaw("Horizontal");
 
+                _walkClipLength -= Time.deltaTime;
+                if (_walkClipLength <= 0 && Mathf.Abs(inputX) > 0 && playerJump.IsGrounded && !_isDashing)
+                {
+                    walkAudioSource.PlayOneShot(walkAudioSource.clip);
+                    _walkClipLength = walkAudioSource.clip.length * 2.5f;
+                }
+                
                 _targetVelocity = inputX * maxMoveSpeedScaler;
                 _rigidbody2D.velocity = LerpedVelocity();
                 if (Input.GetKeyDown(KeyCode.Space))
