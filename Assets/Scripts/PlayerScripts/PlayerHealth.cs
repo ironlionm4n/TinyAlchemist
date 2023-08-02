@@ -16,6 +16,7 @@ namespace PlayerScripts
         [SerializeField] private Color normalColor;
         [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] private Animator animator;
+        [SerializeField] private AudioSource audioSource;
 
         private int _currentHealth;
         public int CurrentHealth => _currentHealth;
@@ -61,6 +62,7 @@ namespace PlayerScripts
         {
             if (_isDead) return;
             
+            audioSource.PlayOneShot(audioSource.clip);
             _currentHealth -= damage;
             StartCoroutine(FlashWhenDamagedRoutine());
         }
