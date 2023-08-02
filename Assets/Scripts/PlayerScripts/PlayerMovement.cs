@@ -18,6 +18,7 @@ namespace PlayerScripts
         private Rigidbody2D _rigidbody2D;
         private Animator _animator;
         private SpriteRenderer _spriteRenderer;
+        public SpriteRenderer GetSpriteRenderer => _spriteRenderer;
         private float _lastDirection = 0f;
         private float _targetVelocity;
         private static readonly int MoveX = Animator.StringToHash("moveX");
@@ -28,6 +29,7 @@ namespace PlayerScripts
         private bool _isWalkingAudioPlaying;
         public bool IsDashing => _isDashing;
         private float _walkClipLength;
+        private bool _canMove = true;
 
         private void OnEnable()
         {
@@ -46,14 +48,13 @@ namespace PlayerScripts
         // Update is called once per frame
         private void Update()
         {
-            Debug.Log(walkAudioSource.isPlaying);
             if (_isDead)
             {
                 _rigidbody2D.velocity = Vector2.zero;
                 return;
             }
 
-            if (!_isGettingKnockBacked)
+            if (!_isGettingKnockBacked && _canMove)
             {
                 var inputX = Input.GetAxisRaw("Horizontal");
 
@@ -96,6 +97,8 @@ namespace PlayerScripts
 
         private void HandleAnimator()
         {
+            if (!_canMove) return;
+            
             _animator.SetFloat(MoveX, Mathf.Abs(_rigidbody2D.velocity.x));
             // If player is moving, set flipX and update lastDirection
             if (_targetVelocity != 0)
@@ -140,6 +143,20 @@ namespace PlayerScripts
         {
             _isDashing = false;
             _rigidbody2D.excludeLayers = normalLayerMask;
+        }
+
+        public void UpdateCanMove(bool canMove)
+        {
+            if (!canMove)
+            {
+                _rigidbody2D.velocity = new Vector2(0, _rigidbody2D.velocity.y);
+            }
+            _canMove = canMove;
+        }
+
+        public void UpdatePlayerPositionAfterFireDash(float distance)
+        {
+            transform.position = new Vector3(transform.position.x + distance, transform.position.y);
         }
     }
 }
