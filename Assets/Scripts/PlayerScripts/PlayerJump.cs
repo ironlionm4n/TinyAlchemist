@@ -25,6 +25,7 @@ namespace PlayerScripts
         private static readonly int Land = Animator.StringToHash("Land");
         private static readonly int IsJumping = Animator.StringToHash("IsJumping");
         private bool _isDead;
+        private bool _canJump = true;
 
         private void OnEnable()
         {
@@ -39,7 +40,7 @@ namespace PlayerScripts
 
         private void Update()
         {
-            if (_isDead) return;
+            if (_isDead || !_canJump) return;
             
             // Two raycasts from the left and right sides of the player
             RaycastHit2D hitLeft = Physics2D.Raycast((transform.position + (Vector3.left * groundRayModifier)), Vector2.down, groundedRaycastDistance, whatIsGround);
@@ -105,5 +106,16 @@ namespace PlayerScripts
         {
             _isDead = true;
         }
+
+        public void UpdatePlayerJumpFalse()
+        {
+            _canJump = false;
+        }
+        
+        public void UpdatePlayerJumpTrue()
+        {
+            _canJump = true;
+        }
+        
     }
 }

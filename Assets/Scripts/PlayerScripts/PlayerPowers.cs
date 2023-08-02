@@ -9,12 +9,17 @@ namespace PlayerScripts
     {
         [SerializeField] private List<PlayerPowerScriptableObjects> playerPowers;
         [SerializeField] private PlayerMovement playerMovement;
+        [SerializeField] private PlayerJump playerJump;
+        [SerializeField] private float rayDistance;
+        [SerializeField] private LayerMask groundLayer;
+
         [Header("AudioSources")]
         [SerializeField] private AudioSource igniteAudioSource;
         [SerializeField] private AudioSource furyFistAudioSource;
         [SerializeField] private AudioSource fireDashAudioSource;
         [SerializeField] private AudioSource magmaShotAudioSource;
-        
+        [SerializeField] private AudioSource notAbleAudioSource;
+
         public List<PlayerPowerScriptableObjects> GetPlayerPowers => playerPowers;
         private Animator _playerAnimator;
         private static readonly int Ignite = Animator.StringToHash("Ignite");
@@ -50,6 +55,7 @@ namespace PlayerScripts
         private void Update()
         {
             if (_isDead) return;
+
             
             if (!playerMovement.IsDashing && (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) && _canIgnite)
             {
@@ -69,7 +75,26 @@ namespace PlayerScripts
             }
             if (!playerMovement.IsDashing && (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) && _canFireDash)
             {
+
+                RaycastHit2D rayCastHit;
+                if (playerMovement.GetSpriteRenderer.flipX)
+                {
+                    rayCastHit = Physics2D.Raycast(transform.position, Vector2.left, rayDistance, groundLayer);
+                }
+                else
+                {
+                    rayCastHit = Physics2D.Raycast(transform.position, Vector2.right, rayDistance, groundLayer);
+                }
+
+                if (rayCastHit.collider != null)
+                {
+                    Debug.Log("Not enough distance");
+                    notAbleAudioSource.PlayOneShot(notAbleAudioSource.clip);
+                    return;
+                }
+                UpdatePlayerCanMove(false);
                 _canFireDash = false;
+                playerJump.UpdatePlayerJumpFalse();
                 _playerAnimator.SetTrigger(FireDash);
                 fireDashAudioSource.PlayOneShot(fireDashAudioSource.clip);
                 _playerAnimator.SetBool(IsInPower, true);
@@ -77,6 +102,7 @@ namespace PlayerScripts
             }
             if (!playerMovement.IsDashing && (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4)) && _canMagmaShot)
             {
+                UpdatePlayerCanMove(false);
                 _canMagmaShot = false;
                 _playerAnimator.SetTrigger(MagmaShot);
                 magmaShotAudioSource.PlayOneShot(magmaShotAudioSource.clip);
@@ -113,6 +139,27 @@ namespace PlayerScripts
         public void NotInPower()
         {
             _playerAnimator.SetBool(IsInPower, false);
+        }
+
+        public void UpdatePlayerCanMove(bool canMove)
+        {
+            playerMovement.UpdateCanMove(canMove);
+        }
+
+        public void PlayerCanMoveTrueAnimationEvent()
+        {
+            UpdatePlayerCanMove(true);
+        }
+
+        public void PlayerMovementUpdatePositionAfterFireDash()
+        {
+            var distance = playerMovement.GetSpriteRenderer.flipX ? -(rayDistance - .35f) : rayDistance - .35f;
+            playerMovement.UpdatePlayerPositionAfterFireDash(distance);
+        }
+
+        public void PlayerJumpUpdateJumpTrue()
+        {
+            playerJump.UpdatePlayerJumpTrue();
         }
     }
 }
