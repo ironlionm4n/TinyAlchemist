@@ -34,6 +34,8 @@ namespace PlayerScripts
             
             playerMovement.WasJustKnockedBack();
             Debug.Log("KnockBacked");
+            // Set vertical velocity to zero
+            playerRigidbody2D.velocity = new Vector2(playerRigidbody2D.velocity.x, 0f);
             playerRigidbody2D.AddForce(knockBackDirection * knockBackForce, ForceMode2D.Impulse);
         }
     }

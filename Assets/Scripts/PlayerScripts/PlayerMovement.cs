@@ -15,11 +15,15 @@ namespace PlayerScripts
         [SerializeField] private AudioSource walkAudioSource;
         [SerializeField] private PlayerJump playerJump;
 
+        private enum FacingDirection
+        {
+            Left,
+            Right
+        }
+
+        private FacingDirection _currentFacingDirection = FacingDirection.Right;
         private Rigidbody2D _rigidbody2D;
         private Animator _animator;
-        private SpriteRenderer _spriteRenderer;
-        public SpriteRenderer GetSpriteRenderer => _spriteRenderer;
-        private float _lastDirection = 0f;
         private float _targetVelocity;
         private static readonly int MoveX = Animator.StringToHash("moveX");
         private static readonly int Dash = Animator.StringToHash("Dash");
@@ -42,7 +46,6 @@ namespace PlayerScripts
             _walkClipLength = walkAudioSource.clip.length * 2.5f;
             _rigidbody2D = GetComponent<Rigidbody2D>();
             _animator = GetComponent<Animator>();
-            _spriteRenderer = GetComponent<SpriteRenderer>();
         }
     
         // Update is called once per frame
@@ -53,7 +56,7 @@ namespace PlayerScripts
                 _rigidbody2D.velocity = Vector2.zero;
                 return;
             }
-
+            
             if (!_isGettingKnockBacked && _canMove)
             {
                 var inputX = Input.GetAxisRaw("Horizontal");
@@ -101,15 +104,16 @@ namespace PlayerScripts
             
             _animator.SetFloat(MoveX, Mathf.Abs(_rigidbody2D.velocity.x));
             // If player is moving, set flipX and update lastDirection
-            if (_targetVelocity != 0)
+            if (_targetVelocity < 0 && _currentFacingDirection == FacingDirection.Right)
             {
-                _spriteRenderer.flipX = _targetVelocity < 0;
-                _lastDirection = _targetVelocity;
+                _currentFacingDirection = FacingDirection.Left;
+                gameObject.transform.localScale = new Vector3(-1,1,1);
             }
             // If player is idle, set flipX based on lastDirection
-            else
+            else if(_targetVelocity > 0 && _currentFacingDirection == FacingDirection.Left)
             {
-                _spriteRenderer.flipX = _lastDirection < 0;
+                _currentFacingDirection = FacingDirection.Right;
+                gameObject.transform.localScale = new Vector3(1,1,1);
             }
         }
 

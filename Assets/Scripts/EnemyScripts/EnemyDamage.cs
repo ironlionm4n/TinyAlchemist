@@ -16,8 +16,23 @@ namespace EnemyScripts
                 var playerHealth = other.GetComponent<PlayerHealth>();
                 var playerKnockBack = other.GetComponent<PlayerKnockBack>();
                 playerHealth.TakeDamage(damage);
-                var knockBackDirection = other.transform.position - transform.position;
-                var normalizedKnockBackDirection = new Vector2(knockBackDirection.x, knockBackDirection.y).normalized;
+
+                var knockBackDirection = Vector2.zero;
+                if (other.transform.position.y > transform.position.y)
+                {
+                    // Player is above the enemy
+                    // Here, we use the direction of the player relative to the enemy to determine the direction of the knockback:
+                    var horizontalDirection = (other.transform.position.x > transform.position.x) ? 1 : -1;
+                    knockBackDirection = new Vector2(horizontalDirection, 1); // Assuming you want to knock upwards
+                }
+                else
+                {
+                    // Player is to the side of the enemy
+                    var horizontalDirection = (other.transform.position.x > transform.position.x) ? 1 : -1;
+                    knockBackDirection = new Vector2(horizontalDirection, 0); // No vertical knockback
+                }
+
+                var normalizedKnockBackDirection = knockBackDirection.normalized;
                 Debug.Log(normalizedKnockBackDirection);
                 playerKnockBack.KnockBack(normalizedKnockBackDirection, knockBackForce);
             }

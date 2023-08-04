@@ -167,15 +167,15 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.6666667
-    functionName: PlayerJumpUpdateJumpTrue
+  - time: 0.5833333
+    functionName: PlayerCanMoveTrueAnimationEvent
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.6666667
-    functionName: PlayerCanMoveTrueAnimationEvent
+  - time: 0.5833333
+    functionName: PlayerJumpUpdateJumpTrue
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

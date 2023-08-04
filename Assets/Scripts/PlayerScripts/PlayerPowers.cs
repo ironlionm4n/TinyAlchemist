@@ -12,6 +12,12 @@ namespace PlayerScripts
         [SerializeField] private PlayerJump playerJump;
         [SerializeField] private float rayDistance;
         [SerializeField] private LayerMask groundLayer;
+        [SerializeField] private Transform wallCheckPosition;
+
+        [Header("Power Hit Boxes")]
+        [SerializeField] private BoxCollider2D fireDashBoxCollider2D;
+        [SerializeField] private BoxCollider2D furyFistBoxCollider2D;
+        [SerializeField] private BoxCollider2D magmaShotBoxCollider2D;
 
         [Header("AudioSources")]
         [SerializeField] private AudioSource igniteAudioSource;
@@ -73,17 +79,17 @@ namespace PlayerScripts
                 _playerAnimator.SetBool(IsInPower, true);
                 FuryFistUsed?.Invoke(this);
             }
-            if (!playerMovement.IsDashing && (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) && _canFireDash)
+            if (!playerMovement.IsDashing && playerJump.IsGrounded && (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) && _canFireDash)
             {
 
                 RaycastHit2D rayCastHit;
-                if (playerMovement.GetSpriteRenderer.flipX)
+                if (gameObject.transform.localScale.x < 0)
                 {
-                    rayCastHit = Physics2D.Raycast(transform.position, Vector2.left, rayDistance, groundLayer);
+                    rayCastHit = Physics2D.Raycast(wallCheckPosition.position, Vector2.left, rayDistance, groundLayer);
                 }
                 else
                 {
-                    rayCastHit = Physics2D.Raycast(transform.position, Vector2.right, rayDistance, groundLayer);
+                    rayCastHit = Physics2D.Raycast(wallCheckPosition.position, Vector2.right, rayDistance, groundLayer);
                 }
 
                 if (rayCastHit.collider != null)
@@ -92,6 +98,7 @@ namespace PlayerScripts
                     notAbleAudioSource.PlayOneShot(notAbleAudioSource.clip);
                     return;
                 }
+                
                 UpdatePlayerCanMove(false);
                 _canFireDash = false;
                 playerJump.UpdatePlayerJumpFalse();
@@ -100,7 +107,7 @@ namespace PlayerScripts
                 _playerAnimator.SetBool(IsInPower, true);
                 FireDashUsed?.Invoke(this);
             }
-            if (!playerMovement.IsDashing && (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4)) && _canMagmaShot)
+            if (!playerMovement.IsDashing && playerJump.IsGrounded && (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4)) && _canMagmaShot)
             {
                 UpdatePlayerCanMove(false);
                 _canMagmaShot = false;
@@ -153,7 +160,7 @@ namespace PlayerScripts
 
         public void PlayerMovementUpdatePositionAfterFireDash()
         {
-            var distance = playerMovement.GetSpriteRenderer.flipX ? -(rayDistance - .35f) : rayDistance - .35f;
+            var distance = transform.localScale.x  < 0? -(rayDistance - .35f) : rayDistance - .35f;
             playerMovement.UpdatePlayerPositionAfterFireDash(distance);
         }
 
