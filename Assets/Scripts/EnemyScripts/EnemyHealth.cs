@@ -8,7 +8,7 @@ public class EnemyHealth : MonoBehaviour, ITakeDamage
     [SerializeField] private Animator animator;
     [SerializeField] private BoxCollider2D damageCollider;
     [SerializeField] private AudioSource audioSource;
-    
+
     public static event Action EnemyHit;
     
     private static readonly int Hit = Animator.StringToHash("Hit");
@@ -16,6 +16,7 @@ public class EnemyHealth : MonoBehaviour, ITakeDamage
 
     public void TakeDamage(int damage)
     {
+        Debug.Log("Hello");
         animator.SetTrigger(Hit);
         EnemyHit?.Invoke();
         health -= damage;

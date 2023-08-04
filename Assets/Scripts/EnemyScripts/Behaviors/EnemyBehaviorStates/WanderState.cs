@@ -16,6 +16,7 @@ namespace EnemyScripts.Behaviors.EnemyBehaviorStates
         private LayerMask _groundLayerMask;
         private Vector2 _direction;
         private float _moveSpeed;
+        private static readonly int IsWandering = Animator.StringToHash("IsWandering");
 
         public WanderState(float wanderTime, Transform leftEdgeCheck, Transform rightEdgeCheck, Animator animator,
             LayerMask groundLayerMask, Rigidbody2D rigidbody, float moveSpeed, SpriteRenderer spriteRenderer)
@@ -35,7 +36,7 @@ namespace EnemyScripts.Behaviors.EnemyBehaviorStates
         {
             _currentWanderTime = _wanderTime;
             _isWandering = true;
-            _animator.Play("Run");
+            _animator.SetBool(IsWandering, true);
             _direction = GetRandomDirection();
         }
 
@@ -81,6 +82,7 @@ namespace EnemyScripts.Behaviors.EnemyBehaviorStates
         public void Exit()
         {
             _rigidbody.velocity = Vector2.zero;
+            _animator.SetBool(IsWandering, false);
         }
 
         public bool IsDoneWondering()

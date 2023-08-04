@@ -12,6 +12,7 @@ namespace PlayerScripts
         [SerializeField] private float jumpCooldown = 0.2f;
         [SerializeField] private float groundRayModifier;
         [SerializeField] private AudioSource jumpAudioSource;
+        [SerializeField] private Transform leftGroundCheck, rightGroundCheck;
         
         private Rigidbody2D _rigidbody2D;
         private float _jumpTime;
@@ -43,12 +44,12 @@ namespace PlayerScripts
             if (_isDead || !_canJump) return;
             
             // Two raycasts from the left and right sides of the player
-            RaycastHit2D hitLeft = Physics2D.Raycast((transform.position + (Vector3.left * groundRayModifier)), Vector2.down, groundedRaycastDistance, whatIsGround);
-            RaycastHit2D hitRight = Physics2D.Raycast((transform.position + (Vector3.right * groundRayModifier)), Vector2.down, groundedRaycastDistance, whatIsGround);
+            RaycastHit2D hitLeft = Physics2D.Raycast(leftGroundCheck.position, Vector2.down, groundedRaycastDistance, whatIsGround);
+            RaycastHit2D hitRight = Physics2D.Raycast(rightGroundCheck.position, Vector2.down, groundedRaycastDistance, whatIsGround);
 
             // Draw the raycasts for debugging
-            Debug.DrawRay((transform.position + (Vector3.left * groundRayModifier)), Vector2.down * groundedRaycastDistance, Color.green);
-            Debug.DrawRay((transform.position + (Vector3.right * groundRayModifier)), Vector2.down * groundedRaycastDistance, Color.blue);
+            Debug.DrawRay(leftGroundCheck.position, Vector2.down *  groundedRaycastDistance, Color.green);
+            Debug.DrawRay(rightGroundCheck.position, Vector2.down * groundedRaycastDistance, Color.blue);
 
             _isGrounded = hitLeft.collider != null || hitRight.collider != null;
 

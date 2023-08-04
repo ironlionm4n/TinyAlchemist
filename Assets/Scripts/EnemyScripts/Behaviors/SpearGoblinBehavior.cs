@@ -14,6 +14,7 @@ public class SpearGoblinBehavior : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private float playerDetectionRange;
+    [SerializeField] private float timeBetweenAttacks;
     [SerializeField] private GameObject playerGameObject;
     private Animator _animator;
     
@@ -23,17 +24,18 @@ public class SpearGoblinBehavior : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
        UpdateCurrentState(new IdleState(idleTime, _animator));
+
     }
 
     private void Update()
     {
         _currentState.Execute();
         
-        if (IsPlayerDetected())
+        if (IsPlayerYIsOnOrAboveEnemyY() && IsPlayerDetected())
         {
             if (_currentState is not AttackState)
             {
-                UpdateCurrentState(new AttackState(_animator, gameObject, playerGameObject, playerDetectionRange));    
+                UpdateCurrentState(new AttackState(_animator, gameObject, playerGameObject, playerDetectionRange, timeBetweenAttacks));    
             }
             
             var pos = transform.position - playerGameObject.transform.position;
@@ -43,7 +45,7 @@ public class SpearGoblinBehavior : MonoBehaviour
         if (_currentState is AttackState)
         {
             var attackState = (AttackState)_currentState;
-            if (attackState.PlayerOutOfRange())
+            if (!attackState.IsAttacking && attackState.PlayerOutOfRange() || !IsPlayerYIsOnOrAboveEnemyY())
             {
                 UpdateCurrentState(GetNewIdleState());
             }
@@ -67,6 +69,11 @@ public class SpearGoblinBehavior : MonoBehaviour
         }
     }
 
+    private bool IsPlayerYIsOnOrAboveEnemyY()
+    {
+        return (transform.position.y <= playerGameObject.transform.position.y);
+    }
+
     private IdleState GetNewIdleState()
     {
         return new IdleState(idleTime, _animator);
@@ -84,4 +91,5 @@ public class SpearGoblinBehavior : MonoBehaviour
         return Vector2.Distance(transform.position, playerGameObject.transform.position) <= playerDetectionRange;
     }
     
+
 }
