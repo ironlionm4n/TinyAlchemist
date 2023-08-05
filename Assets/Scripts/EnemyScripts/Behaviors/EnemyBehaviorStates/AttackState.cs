@@ -6,6 +6,7 @@ namespace EnemyScripts.Behaviors.EnemyBehaviorStates
 {
     public class AttackState : IState
     {
+        public string stateName => "AttackState";
         private Animator _animator;
         private GameObject _enemyGameObject, _playerGameObject;
         private float _playerDetectionRange, _timeBetweenAttacks;
@@ -37,6 +38,15 @@ namespace EnemyScripts.Behaviors.EnemyBehaviorStates
         {
             if (!IsAttacking)
             {
+                var direction = _enemyGameObject.transform.position - _playerGameObject.transform.position;
+                if (direction.x > 0)
+                {
+                    _enemyGameObject.transform.localScale = new Vector3(1,1,1);
+                }
+                else
+                {
+                    _enemyGameObject.transform.localScale = new Vector3(-1,1,1);
+                }
                 IsAttacking = true;
                 _animator.SetTrigger(Attack);
                 _enemyMono.StartCoroutine(AttackDelay());
@@ -45,13 +55,16 @@ namespace EnemyScripts.Behaviors.EnemyBehaviorStates
 
         private IEnumerator AttackDelay()
         {
-            yield return new WaitForSeconds(_timeBetweenAttacks);
+            yield return new WaitForSeconds(_timeBetweenAttacks/2f + _animator.GetCurrentAnimatorClipInfo(0).Length/2f);
+            _animator.ResetTrigger(Attack);
+            yield return new WaitForSeconds(_timeBetweenAttacks/2f + _animator.GetCurrentAnimatorClipInfo(0).Length/2f);
             IsAttacking = false;
         }
 
         public void Exit()
         {
             //_enemyMono.StopCoroutine(AttackDelay());
+            _animator.ResetTrigger(Attack);
         }
 
         public bool PlayerOutOfRange()

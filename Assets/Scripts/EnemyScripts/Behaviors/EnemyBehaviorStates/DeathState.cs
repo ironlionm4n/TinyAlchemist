@@ -1,0 +1,31 @@
+﻿using UnityEngine;
+
+namespace EnemyScripts.Behaviors.EnemyBehaviorStates
+{
+    public class DeathState : IState
+    {
+        private Animator _animator;
+        private GameObject _enemyGameObject;
+
+        public DeathState(Animator animator, GameObject enemyGameObject)
+        {
+            _animator = animator;
+            _enemyGameObject = enemyGameObject;
+        }
+        public string stateName { get; } = "Death";
+        public void Enter()
+        {
+            _animator.SetBool("IsDead", true);
+        }
+
+        public void Execute()
+        {
+            
+        }
+
+        public void Exit()
+        {
+            
+        }
+    }
+}
