@@ -65,6 +65,7 @@ namespace PlayerScripts
             
             if (!playerMovement.IsDashing && (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) && _canIgnite)
             {
+                UpdatePlayerCanMove(false);
                 _canIgnite = false;
                 _playerAnimator.SetTrigger(Ignite);
                 igniteAudioSource.PlayOneShot(igniteAudioSource.clip);
@@ -73,6 +74,7 @@ namespace PlayerScripts
             }
             if (!playerMovement.IsDashing && (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2)) && _canFuryFist)
             {
+                UpdatePlayerCanMove(false);
                 _canFuryFist = false;
                 _playerAnimator.SetTrigger(FuryFist);
                 furyFistAudioSource.PlayOneShot(furyFistAudioSource.clip);

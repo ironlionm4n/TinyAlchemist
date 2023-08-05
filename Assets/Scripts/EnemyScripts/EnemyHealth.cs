@@ -19,6 +19,7 @@ public class EnemyHealth : MonoBehaviour, ITakeDamage
 
     public void TakeDamage(int damage)
     {
+        Debug.Log("Enemy Damaged");
         animator.SetTrigger(Hit);
         EnemyHit?.Invoke();
         health -= damage;
