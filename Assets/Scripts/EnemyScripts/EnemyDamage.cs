@@ -33,7 +33,6 @@ namespace EnemyScripts
                 }
 
                 var normalizedKnockBackDirection = knockBackDirection.normalized;
-                Debug.Log(normalizedKnockBackDirection);
                 playerKnockBack.KnockBack(normalizedKnockBackDirection, knockBackForce);
             }
         }

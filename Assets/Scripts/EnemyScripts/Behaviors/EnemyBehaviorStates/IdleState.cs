@@ -4,24 +4,23 @@ namespace EnemyScripts.Behaviors.EnemyBehaviorStates
 {
     public class IdleState : IState
     {
-        private string _stateName;
-        public string StateName => _stateName;
+        public string stateName => "Idle";
         private Animator _animator;
         private float _idleTime;
         private float _currentIdleTime;
         private bool _isDoneIdling;
-        
+        private static readonly int IsIdle = Animator.StringToHash("IsIdle");
+
         public IdleState(float idleTime, Animator animator)
         {
             _idleTime = idleTime;
             _animator = animator;
-            _stateName = "Idle";
         }
         
         public void Enter()
         {
             _currentIdleTime = _idleTime;
-            _animator.Play("Idle");
+            _animator.SetBool(IsIdle, true);
         }
 
         public void Execute()
@@ -35,7 +34,7 @@ namespace EnemyScripts.Behaviors.EnemyBehaviorStates
 
         public void Exit()
         {
-                
+            _animator.SetBool(IsIdle, false);
         }
 
         public bool CheckIfDoneIdling() => _isDoneIdling;

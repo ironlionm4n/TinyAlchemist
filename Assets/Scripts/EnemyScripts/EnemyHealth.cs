@@ -1,4 +1,6 @@
 using System;
+using EnemyScripts.Behaviors;
+using EnemyScripts.Behaviors.EnemyBehaviorStates;
 using Scripts.Interfaces;
 using UnityEngine;
 
@@ -8,6 +10,7 @@ public class EnemyHealth : MonoBehaviour, ITakeDamage
     [SerializeField] private Animator animator;
     [SerializeField] private BoxCollider2D damageCollider;
     [SerializeField] private AudioSource audioSource;
+    [SerializeField] private SpearGoblinBehavior _spearGoblinBehavior;
 
     public static event Action EnemyHit;
     
@@ -16,7 +19,6 @@ public class EnemyHealth : MonoBehaviour, ITakeDamage
 
     public void TakeDamage(int damage)
     {
-        Debug.Log("Hello");
         animator.SetTrigger(Hit);
         EnemyHit?.Invoke();
         health -= damage;
@@ -28,8 +30,15 @@ public class EnemyHealth : MonoBehaviour, ITakeDamage
         if (health <= 0)
         {
             damageCollider.enabled = false;
-            animator.SetTrigger(Dead);
             audioSource.PlayOneShot(audioSource.clip);
+            if (_spearGoblinBehavior)
+            {
+                _spearGoblinBehavior.UpdateCurrentState(new DeathState(animator, gameObject));
+            }
+            else
+            {
+                animator.SetTrigger(Dead);
+            }
         }
     }
 }
