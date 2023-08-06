@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using ScriptableObjects;
 using UnityEngine;
@@ -66,6 +67,10 @@ namespace PlayerScripts
             if (!playerMovement.IsDashing && (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) && _canIgnite)
             {
                 UpdatePlayerCanMove(false);
+                var transformLocalScale = transform.localScale;
+                transform.localScale = new Vector3(transformLocalScale.x + CheckSignForXScaleAdjustment(transformLocalScale), 1.25f, 1);
+                transform.position += new Vector3(0, .25f, 0);
+                StartCoroutine(ReturnToNormalScaleRoutine());
                 _canIgnite = false;
                 _playerAnimator.SetTrigger(Ignite);
                 igniteAudioSource.PlayOneShot(igniteAudioSource.clip);
@@ -119,7 +124,18 @@ namespace PlayerScripts
                 MagmaShotUsed?.Invoke(this);
             }
         }
-        
+
+        private static float CheckSignForXScaleAdjustment(Vector3 transformLocalScale)
+        {
+            return Mathf.Sign(transformLocalScale.x) == -1 ? -.25f : .25f;
+        }
+
+        private IEnumerator ReturnToNormalScaleRoutine()
+        {
+            yield return new WaitForSeconds(.3f);
+            transform.localScale = new Vector3(transform.localScale.x - CheckSignForXScaleAdjustment(transform.localScale), 1, 1);
+        }
+
         private void OnDisable()
         {
             PlayerHealth.PlayerDied -= OnPlayerDied;
