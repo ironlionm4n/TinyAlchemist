@@ -14,6 +14,8 @@ namespace PlayerScripts
         [SerializeField] private AudioSource dashAudioSource;
         [SerializeField] private AudioSource walkAudioSource;
         [SerializeField] private PlayerJump playerJump;
+        [SerializeField] private float dashCooldownTime;
+        private bool _canDash = true;
 
         private enum FacingDirection
         {
@@ -70,7 +72,7 @@ namespace PlayerScripts
                 
                 _targetVelocity = inputX * maxMoveSpeedScaler;
                 _rigidbody2D.velocity = LerpedVelocity();
-                if (Input.GetKeyDown(KeyCode.Space))
+                if (_canDash && Input.GetKeyDown(KeyCode.Space))
                 {
                     HandleDash();
                 }
@@ -92,10 +94,18 @@ namespace PlayerScripts
         private void HandleDash()
         {
             _isDashing = true;
+            _canDash = false;
+            StartCoroutine(DashCooldownRoutine());
             dashAudioSource.PlayOneShot(dashAudioSource.clip);
             var dashDirection = _targetVelocity < 0 ? Vector2.left : Vector2.right;
             _rigidbody2D.AddForce(dashDirection * dashForce, ForceMode2D.Impulse);
             _animator.SetTrigger(Dash);
+        }
+
+        private IEnumerator DashCooldownRoutine()
+        {
+            yield return new WaitForSeconds(dashCooldownTime);
+            _canDash = true;
         }
 
         private void HandleAnimator()
