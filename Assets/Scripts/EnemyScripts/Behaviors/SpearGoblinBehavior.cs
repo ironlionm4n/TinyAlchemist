@@ -96,7 +96,6 @@ namespace EnemyScripts.Behaviors
 
         public void UpdateCurrentState(IState newState)
         {
-            Debug.Log(newState.stateName);
             _currentState?.Exit();
             _currentState = newState;
             _currentState.Enter();
