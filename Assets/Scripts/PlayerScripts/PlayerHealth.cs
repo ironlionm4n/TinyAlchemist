@@ -16,7 +16,9 @@ namespace PlayerScripts
         [SerializeField] private Color normalColor;
         [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] private Animator animator;
-        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioSource playerDamagedAudioSource;
+        [SerializeField] private AudioSource healthPickUpAudioSource;
+        [SerializeField] private AudioSource playerDeathAudioSource;
 
         private int _currentHealth;
         public int CurrentHealth => _currentHealth;
@@ -38,6 +40,7 @@ namespace PlayerScripts
         private void OnHealthPickedUp(int healAmount)
         {
             _currentHealth += healAmount;
+            healthPickUpAudioSource.PlayOneShot(healthPickUpAudioSource.clip);
             if (_currentHealth > playerHealth)
             {
                 _currentHealth = playerHealth;
@@ -62,7 +65,7 @@ namespace PlayerScripts
         {
             if (_isDead) return;
             
-            audioSource.PlayOneShot(audioSource.clip);
+            playerDamagedAudioSource.PlayOneShot(playerDamagedAudioSource.clip);
             _currentHealth -= damage;
             StartCoroutine(FlashWhenDamagedRoutine());
         }
@@ -78,9 +81,11 @@ namespace PlayerScripts
             _playerDamageFlash.NormalSpriteColor();
         }
 
-        private void HandlePlayerDeath()
+        public void HandlePlayerDeath()
         {
+            Debug.Log("HandlePlayerDeath");
             animator.SetBool(IsDead, true);
+            playerDeathAudioSource.PlayOneShot(playerDeathAudioSource.clip);
             PlayerDied?.Invoke();
         }
     }

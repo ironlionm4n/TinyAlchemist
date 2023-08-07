@@ -97,7 +97,7 @@ namespace PlayerScripts
             _canDash = false;
             StartCoroutine(DashCooldownRoutine());
             dashAudioSource.PlayOneShot(dashAudioSource.clip);
-            var dashDirection = _targetVelocity < 0 ? Vector2.left : Vector2.right;
+            var dashDirection = transform.localScale.x < 0 ? Vector2.left : Vector2.right;
             _rigidbody2D.AddForce(dashDirection * dashForce, ForceMode2D.Impulse);
             _animator.SetTrigger(Dash);
         }
