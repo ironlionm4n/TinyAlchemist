@@ -28,6 +28,8 @@ namespace PlayerScripts
         private bool _isDead;
         private bool _canJump = true;
 
+        
+
         private void OnEnable()
         {
             PlayerHealth.PlayerDied += OnPlayerDied;
@@ -117,6 +119,5 @@ namespace PlayerScripts
         {
             _canJump = true;
         }
-        
     }
 }

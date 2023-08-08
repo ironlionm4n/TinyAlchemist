@@ -57,7 +57,7 @@ namespace PlayerScripts
         {
             if (_currentHealth <= 0)
             {
-              HandlePlayerDeath();
+                HandlePlayerDeath();
             }
         }
 

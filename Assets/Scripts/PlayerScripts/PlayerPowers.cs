@@ -3,22 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using ScriptableObjects;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace PlayerScripts
 {
     public class PlayerPowers : MonoBehaviour
     {
+        [Header("References")]
         [SerializeField] private List<PlayerPowerScriptableObjects> playerPowers;
         [SerializeField] private PlayerMovement playerMovement;
         [SerializeField] private PlayerJump playerJump;
         [SerializeField] private float rayDistance;
         [SerializeField] private LayerMask groundLayer;
         [SerializeField] private Transform wallCheckPosition;
-
-        [Header("Power Hit Boxes")]
-        [SerializeField] private BoxCollider2D fireDashBoxCollider2D;
-        [SerializeField] private BoxCollider2D furyFistBoxCollider2D;
-        [SerializeField] private BoxCollider2D magmaShotBoxCollider2D;
+        [SerializeField] private Rigidbody2D playerRigidbody;
 
         [Header("AudioSources")]
         [SerializeField] private AudioSource igniteAudioSource;
@@ -39,6 +37,7 @@ namespace PlayerScripts
         private static readonly int FireDash = Animator.StringToHash("FireDash");
         private static readonly int MagmaShot = Animator.StringToHash("MagmaShot");
         private bool _canMagmaShot = true;
+
 
         public static event Action<PlayerPowers> IgniteUsed;
         public static event Action<PlayerPowers> FuryFistUsed;
@@ -86,7 +85,7 @@ namespace PlayerScripts
                 _playerAnimator.SetBool(IsInPower, true);
                 FuryFistUsed?.Invoke(this);
             }
-            if (!playerMovement.IsDashing && playerJump.IsGrounded && (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) && _canFireDash)
+            if (!playerMovement.IsDashing && playerRigidbody.velocity.y <=0 && (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) && _canFireDash)
             {
 
                 RaycastHit2D rayCastHit;
