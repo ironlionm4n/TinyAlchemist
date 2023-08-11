@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5978700571692593250}
   - component: {fileID: 7618666977912699217}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 2701452987983855832}
   - component: {fileID: 5608121042263889838}
   - component: {fileID: 4931365655679606270}
+  - component: {fileID: 29849245322698896}
   m_Layer: 0
   m_Name: Arrow
   m_TagString: Untagged
@@ -173,7 +174,7 @@ PolygonCollider2D:
     m_Bits: 4294967295
   m_CallbackLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 320
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -204,3 +205,19 @@ PolygonCollider2D:
       - {x: 0.22446774, y: 0.14410658}
       - {x: 0.22678198, y: 0.23129566}
   m_UseDelaunayMesh: 0
+--- !u!114 &29849245322698896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4792978366884101873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74308966beb73904d9bbcbbe62a00337, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrowRigidbody2D: {fileID: 5608121042263889838}
+  gravityScaleDelta: 0.5
+  alphaChangeDelta: 0.4
+  angularChangeInDegrees: 61
