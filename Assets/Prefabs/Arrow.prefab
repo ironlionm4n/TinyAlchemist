@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5978700571692593250}
   - component: {fileID: 7618666977912699217}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 5608121042263889838}
   - component: {fileID: 4931365655679606270}
   - component: {fileID: 29849245322698896}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Arrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -158,10 +158,10 @@ PolygonCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1015
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1024
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -219,5 +219,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arrowRigidbody2D: {fileID: 5608121042263889838}
   gravityScaleDelta: 0.5
-  alphaChangeDelta: 0.4
+  alphaChangeDelta: 0.01
   angularChangeInDegrees: 61

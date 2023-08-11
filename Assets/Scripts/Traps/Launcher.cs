@@ -55,10 +55,12 @@ namespace Traps
             {
                 case ShotDirection.Right:
                     direction = Vector2.right;
+                    arrowRigidbody.transform.Rotate(0,0,-90);
                     break;
                 
                 case ShotDirection.Down:
                     direction = Vector2.down;
+                    arrowRigidbody.transform.Rotate(0f,0f,180f);
                     break;
                 case ShotDirection.Left:
                     direction = Vector2.left;
