@@ -31,7 +31,7 @@ namespace Misc
             var startingGravity = 0f; 
             var arrowSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
             var startingSpriteAlpha = arrowSpriteRenderer.color.a;
-            while ((1 - arrowRigidbody2D.gravityScale) > 0.1f)
+            while ((1 - arrowRigidbody2D.gravityScale) > 0.1f || arrowSpriteRenderer.color.a > 0)
             {
                 startingGravity = Mathf.MoveTowards(startingGravity, 1f, gravityScaleDelta);
                 arrowRigidbody2D.gravityScale = startingGravity;
