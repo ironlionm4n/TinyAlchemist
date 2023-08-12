@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using PlayerScripts;
 using UnityEngine;
 
 namespace Misc
@@ -11,11 +12,13 @@ namespace Misc
         [SerializeField] private float gravityScaleDelta;
         [SerializeField] private float alphaChangeDelta;
         [SerializeField, Range(33,90)] private float angularChangeInDegrees;
-
+        [SerializeField] private int arrowDamage;
+        
         private void OnCollisionEnter2D(Collision2D other)
         {
             if (other.gameObject.CompareTag("Player"))
             {
+                other.gameObject.GetComponent<PlayerHealth>().TakeDamage(arrowDamage);
                 Destroy(gameObject);
             }
             else
