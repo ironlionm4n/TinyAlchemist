@@ -221,3 +221,5 @@ MonoBehaviour:
   gravityScaleDelta: 0.5
   alphaChangeDelta: 0.01
   angularChangeInDegrees: 61
+  arrowDamage: 5
+  flyForce: 15
