@@ -13,7 +13,14 @@ namespace Misc
         [SerializeField] private float alphaChangeDelta;
         [SerializeField, Range(33,90)] private float angularChangeInDegrees;
         [SerializeField] private int arrowDamage;
-        
+        [SerializeField,Range(15f,25f)] private float flyForce;
+
+        private void Start()
+        {
+            arrowRigidbody2D.AddForce((Vector2)(gameObject.transform.up * flyForce), ForceMode2D.Impulse);
+            //Debug.Break();
+        }
+
         private void OnCollisionEnter2D(Collision2D other)
         {
             if (other.gameObject.CompareTag("Player"))
@@ -44,6 +51,7 @@ namespace Misc
                     arrowSpriteRenderer.color.b, startingSpriteAlpha);
                 yield return null;
             }
+            Destroy(gameObject,0.66f);
         }
     }
 }
